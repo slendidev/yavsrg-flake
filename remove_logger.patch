@@ -1,0 +1,36 @@
+diff --git a/interlude/src/Program.fs b/interlude/src/Program.fs
+index 4fdd25c..ed15114 100644
+--- a/interlude/src/Program.fs
++++ b/interlude/src/Program.fs
+@@ -20,8 +20,6 @@ let crash_text_file (message: string) =
+ let launch (instance: int) : unit =
+     Logging.Verbosity <- if DEV_MODE then LoggingLevel.DEBUG else LoggingLevel.INFO
+ 
+-    Logging.LogFile <- Some(Path.Combine("Logs", sprintf "log-%s.txt" (DateTime.Today.ToString("yyyyMMdd"))))
+-
+     if OperatingSystem.IsWindows() then
+         Process.GetCurrentProcess().PriorityClass <- ProcessPriorityClass.High
+ 
+@@ -114,4 +112,4 @@ let main (argv: string array) : int =
+         | None -> printfn "Error: Connection timed out!"
+ 
+     Environment.Exit(0)
+-    0
+\ No newline at end of file
++    0
+diff --git a/prelude/playground/Program.fs b/prelude/playground/Program.fs
+index 81bd492..b2c6646 100644
+--- a/prelude/playground/Program.fs
++++ b/prelude/playground/Program.fs
+@@ -15,9 +15,8 @@ let your_script_here () =
+ [<EntryPoint>]
+ let main argv =
+     Console.BufferHeight <- 32766
+-    Logging.LogFile <- Some(Path.Combine("Logs", sprintf "log-%s.txt" (DateTime.Today.ToString("yyyyMMdd"))))
+ 
+     your_script_here ()
+ 
+     Logging.Shutdown()
+-    0
+\ No newline at end of file
++    0

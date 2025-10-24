@@ -1,0 +1,39 @@
+diff --git a/interlude/src/Options/Options.fs b/interlude/src/Options/Options.fs
+index 16db4af..8bc1489 100644
+--- a/interlude/src/Options/Options.fs
++++ b/interlude/src/Options/Options.fs
+@@ -1,5 +1,6 @@
+ ﻿namespace Interlude.Options
+ 
++open System
+ open System.IO
+ open System.Collections.Generic
+ open Percyqaz.Common
+@@ -348,7 +349,15 @@ module StaticOptions =
+ 
+ module Options =
+ 
+-    let private CONFIG_PATH = Path.GetFullPath "config.json"
++    let private resolveConfigPath () =
++        let env = Environment.GetEnvironmentVariable "YAVSRG_CONFIG_FILE"
++        let path =
++            if String.IsNullOrWhiteSpace env then "config.json" else env
++        let path' =
++            if Directory.Exists path then Path.Combine(path, "config.json") else path
++        Path.GetFullPath path'
++
++    let private CONFIG_PATH = resolveConfigPath()
+ 
+     let private AVAILABLE_LANGUAGES = Set.ofList ["en_GB"]
+ 
+@@ -391,7 +400,8 @@ module Options =
+ 
+     let deinit () : unit =
+         try
++            Directory.CreateDirectory(Path.GetDirectoryName CONFIG_PATH) |> ignore
+             save_important_json_file CONFIG_PATH config
+             save_important_json_file (Path.Combine(get_game_folder "Data", "options.json")) options
+         with err ->
+-            Logging.Critical "Failed to write options/config to file.\n%O" err
+\ No newline at end of file
++            Logging.Critical "Failed to write options/config to file.\n%O" err

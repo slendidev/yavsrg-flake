@@ -15,13 +15,13 @@
         version = "0.7.28.1"; # I really fucking wish input values could be thunks
         pkgs = import nixpkgs { inherit system; };
         exe = "Interlude";
-				game = pkgs.fetchFromGitHub {
-					owner = "YAVSRG";
-					repo = "YAVSRG";
-					rev = "interlude-v0.7.28.1";
-					sha256 = "sha256-0Qbnywbq4cs/WPhvCou31FFKdqjRhZ4Aww06D1h5Nx4=";
-					fetchSubmodules = true;
-				};
+        game = pkgs.fetchFromGitHub {
+          owner = "YAVSRG";
+          repo = "YAVSRG";
+          rev = "interlude-v0.7.28.1";
+          sha256 = "sha256-0Qbnywbq4cs/WPhvCou31FFKdqjRhZ4Aww06D1h5Nx4=";
+          fetchSubmodules = true;
+        };
       in
       {
         packages = rec {
@@ -44,9 +44,10 @@
             runtimeDeps = with pkgs; [
               libbass
               libbass_fx
-              alsa-lib
               glfw
               libGL
+            ] ++ pkgs.lib.optionals !pkgs.stdenv.isDarwin [
+              alsa-lib
             ];
 
             patches = [

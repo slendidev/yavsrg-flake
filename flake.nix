@@ -13,7 +13,14 @@
       system:
       let
         version = "0.7.28.1"; # I really fucking wish input values could be thunks
-        pkgs = import nixpkgs { inherit system; };
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfreePredicate = pkg:
+            builtins.elem (pkgs.lib.getName pkg) [
+              "libbass"
+              "libbass_fx"
+            ];
+        };
         exe = "Interlude";
         game = pkgs.fetchFromGitHub {
           owner = "YAVSRG";
